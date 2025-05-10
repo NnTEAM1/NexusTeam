@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nexus Team</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      background-image: url('https://www.newegg.com/insider/wp-content/uploads/windows_xp_bliss-wide.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .wave {
+      position: absolute;
+      width: 200%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: url('https://i.ibb.co/Yc3DnYr/wave-white.png') repeat-x;
+      background-size: cover;
+      opacity: 0.2;
+      animation: waveAnimation 8s linear infinite;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    @keyframes waveAnimation {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .logo {
+      font-size: 72px;
+      font-weight: bold;
+      color: violet;
+      text-shadow: 
+        -2px -2px 0 white,  
+        2px -2px 0 white,
+        -2px 2px 0 white,
+        2px 2px 0 white;
+      position: relative;
+      z-index: 10;
+      margin-bottom: 30px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .button {
+      background-color: #0066CC;
+      color: white;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      padding: 10px 20px;
+      font-size: 20px;
+      border: 2px solid #003366;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      z-index: 10;
+      position: relative;
+    }
+
+    .button:hover {
+      background-color: #004C99;
+    }
+
+    .xp-window {
+      width: 700px;
+      height: 400px;
+      background-color: #A7C8E5;
+      border: 2px solid #000080;
+      border-radius: 5px;
+      position: absolute;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      z-index: 20;
+      transform: scale(0.1);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .xp-window.opening {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .xp-window.closing {
+      transform: scale(0.1);
+      opacity: 0;
+    }
+
+    .xp-window-header {
+      background-color: #000080;
+      color: white;
+      padding: 5px 10px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 3px 3px 0 0;
+      cursor: move;
+    }
+
+    .xp-window-body {
+      padding: 20px;
+      text-align: justify;
+      font-size: 16px;
+      color: black;
+      height: calc(100% - 40px);
+      overflow-y: auto;
+    }
+
+    .project-logo {
+      text-align: center;
+      font-size: 32px;
+      font-weight: bold;
+      color: violet;
+      margin-bottom: 20px;
+    }
+
+    .close-btn {
+      background-color: #FF5555;
+      color: white;
+      border: none;
+      padding: 3px 8px;
+      font-weight: bold;
+      cursor: pointer;
+      font-family: sans-serif;
+      font-size: 14px;
+      border-radius: 3px;
+    }
+
+    .close-btn:hover {
+      background-color: #CC0000;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wave"></div>
+
+  <div class="logo">Nexus Team</div>
+  <button class="button" onclick="openXPWindow()">Current Project</button>
+
+  <script>
+    let windowCount = 0;
+
+    function openXPWindow() {
+      const xpWindow = document.createElement('div');
+      xpWindow.className = 'xp-window opening';
+      xpWindow.style.top = `${100 + windowCount * 30}px`;
+      xpWindow.style.left = `${100 + windowCount * 30}px`;
+      xpWindow.innerHTML = `
+        <div class="xp-window-header">
+          Windows XP
+          <button class="close-btn">X</button>
+        </div>
+        <div class="xp-window-body">
+          <div class="project-logo">Neon Nexus</div>
+          <div>
+            Neon Nexus is a beat 'em up game, where you hit with yo-yos, and go on a skateboard. The story is that an infected stole your favorite skateboard, so you are going to get it back, but it will not be easy, since he hired 3 bosses of areas that are strong. Even so, Max is not going to leave his favorite skateboard. The game has 4 chapters, the first comes out on 12/28/25.(actual team: Maxxmi,BreadFT,PapuDEV)
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(xpWindow);
+      windowCount++;
+
+      // Close button logic
+      const closeBtn = xpWindow.querySelector('.close-btn');
+      closeBtn.addEventListener('click', () => {
+        xpWindow.classList.remove('opening');
+        xpWindow.classList.add('closing');
+        setTimeout(() => xpWindow.remove(), 300);
+      });
+
+      // Drag logic
+      const header = xpWindow.querySelector('.xp-window-header');
+      let isDragging = false;
+      let offsetX, offsetY;
+
+      header.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        offsetX = e.clientX - xpWindow.offsetLeft;
+        offsetY = e.clientY - xpWindow.offsetTop;
+      });
+
+      document.addEventListener('mouseup', () => {
+        isDragging = false;
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+          xpWindow.style.left = `${e.clientX - offsetX}px`;
+          xpWindow.style.top = `${e.clientY - offsetY}px`;
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
